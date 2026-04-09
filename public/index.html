@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI Crop Advisor</title>
+<script src="https://unpkg.com/lucide@latest"></script>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body { 
+  font-family: 'Segoe UI', system-ui, -apple-system, sans-serif; 
+  background: #f8faf9; 
+  color: #1f2937; 
+  line-height: 1.6; 
+  overflow-x: hidden;
+  animation: fadeInBody 0.8s ease-in-out;
+}
+
+/* ===== Animations ===== */
+@keyframes fadeInBody {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.fade-up { animation: fadeUp 1s ease forwards; opacity: 0; }
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(30px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.fade-in-delay-1 { animation-delay: 0.2s; }
+.fade-in-delay-2 { animation-delay: 0.4s; }
+.fade-in-delay-3 { animation-delay: 0.6s; }
+.fade-in-delay-4 { animation-delay: 0.8s; }
+
+/* ===== HEADER ===== */
+.header { 
+  position: fixed; top: 0; width: 100%; height: 80px; 
+  background: rgba(255,255,255,0.9); 
+  -webkit-backdrop-filter: blur(12px); 
+  backdrop-filter: blur(12px); 
+  display: flex; align-items: center; justify-content: space-between; 
+  padding: 0 80px; 
+  box-shadow: 0 4px 20px rgba(0,0,0,0.05); z-index: 1000;
+  animation: fadeUp 1s ease forwards;
+}
+.logo-area { display: flex; align-items: center; gap: 12px; }
+.logo-icon { font-size: 28px; color: #166534; }
+.logo-text { font-size: 24px; font-weight: 700; letter-spacing: 0.5px; }
+.right-area { display: flex; align-items: center; gap: 25px; }
+.welcome-text { color: #6b7280; font-size: 15px; }
+.dashboard-btn { 
+  background: linear-gradient(135deg, #166534, #15803d); 
+  color: white; padding: 12px 28px; border-radius: 12px; border: none; 
+  cursor: pointer; font-weight: 600; transition: all 0.3s ease; 
+}
+.dashboard-btn:hover { transform: translateY(-3px); box-shadow: 0 10px 25px rgba(22,101,52,0.3); }
+
+/* ===== HERO SECTION ===== */
+.hero { 
+  margin-top: 80px; min-height: 100vh; 
+  background: linear-gradient(to bottom right, #ecfdf5, #f0fdf4); 
+  display: flex; flex-direction: column; align-items: center; justify-content: center; 
+  text-align: center; padding: 80px 20px;
+}
+.badge { 
+  background: #dcfce7; color: #166534; padding: 10px 22px; border-radius: 50px; 
+  font-size: 14px; margin-bottom: 30px; border: 1px solid #bbf7d0; font-weight: 500; 
+  opacity: 0; animation: fadeUp 1s forwards; animation-delay: 0.2s;
+}
+.hero h1 { 
+  font-size: clamp(42px, 6vw, 70px); font-weight: 800; max-width: 1000px; 
+  line-height: 1.1; margin-bottom: 30px; opacity: 0; animation: fadeUp 1s forwards; animation-delay: 0.4s;
+}
+.hero p { 
+  max-width: 800px; font-size: 20px; color: #4b5563; margin-bottom: 40px; 
+  opacity: 0; animation: fadeUp 1s forwards; animation-delay: 0.6s;
+}
+.get-started { 
+  background: linear-gradient(135deg, #166534, #15803d); color: white; padding: 16px 40px; 
+  font-size: 18px; border-radius: 14px; border: none; cursor: pointer; font-weight: 600; 
+  transition: all 0.3s ease; opacity: 0; animation: fadeUp 1s forwards; animation-delay: 0.8s;
+}
+.get-started:hover { transform: translateY(-4px); box-shadow: 0 12px 30px rgba(22,101,52,0.35); }
+
+/* ===== HERO1 SECTION ===== */
+.hero1 { 
+  min-height: 90vh; background: white; display: flex; flex-direction: column; 
+  align-items: center; justify-content: flex-start; text-align: center; 
+  padding: 90px 20px 40px; 
+}
+.hero1 h1, .hero1 p { opacity: 0; animation: fadeUp 1s forwards; }
+.hero1 h1 { animation-delay: 0.2s; }
+.hero1 p { animation-delay: 0.4s; }
+.card-container { display: flex; gap: 30px; justify-content: center; flex-wrap: wrap; padding: 40px; }
+.card { 
+  background: #ffffff; width: 280px; padding: 30px 20px; border-radius: 16px; border: none; 
+  box-shadow: 0 6px 18px rgba(0,0,0,0.08); text-align: center; cursor: pointer; 
+  transition: all 0.3s ease, transform 0.4s ease; opacity: 0; animation: fadeUp 1s forwards;
+}
+.card:nth-child(1) { animation-delay: 0.3s; }
+.card:nth-child(2) { animation-delay: 0.5s; }
+.card:nth-child(3) { animation-delay: 0.7s; }
+.card:nth-child(4) { animation-delay: 0.9s; }
+.card:hover { transform: translateY(-8px) scale(1.03); box-shadow: 0 12px 25px rgba(0,0,0,0.15); }
+.icon { background-color: #e8f5e9; width: 70px; height: 70px; margin: 0 auto 20px auto; border-radius: 16px; display: flex; align-items: center; justify-content: center; font-size: 32px; }
+
+/* ===== HERO2 SECTION ===== */
+.hero2 { min-height: 90vh; background: white; display: flex; flex-direction: column; 
+  align-items: center; justify-content: flex-start; text-align: center; padding: 120px 20px 40px; }
+.hero2 h1, .hero2 p { opacity: 0; animation: fadeUp 1s forwards; }
+.hero2 h1 { animation-delay: 0.2s; }
+.hero2 p { animation-delay: 0.4s; }
+
+/* ===== STEPS ===== */
+.steps-container { margin-top: 80px; width: 100%; max-width: 1200px; display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 80px; }
+.step { text-align: center; opacity: 0; animation: fadeUp 1s forwards; }
+.step:nth-child(1) { animation-delay: 0.3s; }
+.step:nth-child(2) { animation-delay: 0.5s; }
+.step:nth-child(3) { animation-delay: 0.7s; }
+.step-number { width: 120px; height: 120px; background: #e5e7e6; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 30px; font-size: 36px; font-weight: 700; color: #0f5c2e; transition: all 0.3s ease; }
+.step:hover .step-number { background: #d1fae5; transform: scale(1.05); }
+
+/* ===== CTA ===== */
+.cta-section { padding: 120px 20px; display: flex; justify-content: center; background: #f8faf9; }
+.cta-box { width: 100%; max-width: 900px; padding: 60px 40px; border-radius: 24px; text-align: center; color: white; 
+  background: linear-gradient(135deg, #0f5c2e, #1e7c43); box-shadow: 0 20px 40px rgba(0,0,0,0.12); 
+  opacity: 0; animation: fadeUp 1s forwards; animation-delay: 0.3s; }
+.cta-btn { background: #ff3c00; color: white; padding: 14px 35px; font-size: 16px; font-weight: 600; border: none; border-radius: 14px; cursor: pointer; transition: all 0.3s ease; }
+.cta-btn:hover { transform: translateY(-4px); box-shadow: 0 15px 30px rgba(255,60,0,0.4); background: #ff4d1a; }
+
+/* ===== FOOTER ===== */
+.footer { background: white; color: #1e293b; padding: 60px 80px; border-top: 1px solid #e5e7eb; opacity: 0; animation: fadeUp 1s forwards; animation-delay: 0.2s; }
+.footer-container { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 30px; }
+.footer-left { display: flex; align-items: center; gap: 12px; }
+.footer-logo-icon { font-size: 28px; color: #22c55e; }
+.footer-logo-text { font-size: 22px; font-weight: 700; letter-spacing: 0.5px; }
+.footer-right p { font-size: 18px; color: #5f6b66; max-width: 500px; }
+
+.section-divider { width: 80%; height: 1px; margin: 0 auto; background: linear-gradient(to right, transparent, #d1d5db, transparent); }
+</style>
+</head>
+
+<body>
+
+<!-- HEADER -->
+<div class="header fade-up">
+  <div class="logo-area">
+    <div class="logo-icon">🌿</div>
+    <div class="logo-text">AI Crop Advisor</div>
+  </div>
+  <div class="right-area">
+    <div class="welcome-text">Welcome, Alix John Escobal</div>
+    <button class="dashboard-btn">Dashboard</button>
+  </div>
+</div>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="badge">⚡ AI-Powered Agricultural Intelligence</div>
+  <h1>Grow Smarter, Harvest Better</h1>
+  <p>Leverage artificial intelligence to get personalized crop recommendations, detect plant diseases instantly, and receive expert farming advice tailored to your soil conditions.</p>
+  <button class="get-started">Get Started →</button>
+</section>
+
+<section class="hero1">
+  <h1>Powerful Features</h1>
+  <p>Everything you need to optimize your farming operations with AI-powered insights</p>
+  <div class="card-container">
+    <button class="card"><div class="icon">🌿</div><h3>Crop Recommendations</h3><p>Get personalized crop suggestions based on your soil parameters, climate, and environmental conditions.</p></button>
+    <button class="card"><div class="icon">🔬</div><h3>Disease Detection</h3><p>Upload plant images and get instant AI-powered disease diagnosis with treatment recommendations.</p></button>
+    <button class="card"><div class="icon">💬</div><h3>Expert Chatbot</h3><p>Chat with an AI farming expert for advice on crop care, pest management, and sustainable practices.</p></button>
+    <button class="card"><div class="icon">📊</div><h3>Smart Dashboard</h3><p>Monitor farm insights, performance analytics, and data-driven recommendations.</p></button>
+  </div>
+</section>
+
+<div class="section-divider"></div>
+
+<section class="hero2">
+  <h1>How It Works</h1>
+  <p>Simple steps to get AI-powered agricultural insights</p>
+  <div class="steps-container">
+    <div class="step"><div class="step-number">01</div><h3>Input Your Data</h3><p>Enter your soil parameters (N, P, K, pH) and environmental conditions</p></div>
+    <div class="step"><div class="step-number">02</div><h3>Get AI Analysis</h3><p>Our AI analyzes your data and provides personalized recommendations</p></div>
+    <div class="step"><div class="step-number">03</div><h3>Take Action</h3><p>Implement recommendations and track results in your dashboard</p></div>
+  </div>
+</section>
+
+<section class="cta-section">
+  <div class="cta-box">
+    <h1>Ready to Transform Your Farming?</h1>
+    <p>Join thousands of farmers using AI to make smarter agricultural decisions</p>
+    <button class="cta-btn">Get Started →</button>
+  </div>
+</section>
+
+<footer class="footer">
+  <div class="footer-container">
+    <div class="footer-left"><div class="footer-logo-icon">🌿</div><div class="footer-logo-text">AI Crop Advisor</div></div>
+    <div class="footer-right"><p>Empowering farmers with artificial intelligence</p></div>
+  </div>
+</footer>
+
+<script>
+  function isLoggedIn() { return localStorage.getItem('loggedIn') === 'true'; }
+  function attachLoginRedirect() {
+    const protectedButtons = document.querySelectorAll('.dashboard-btn, .get-started, .card, .cta-btn');
+    protectedButtons.forEach(button => {
+      button.addEventListener('click', (e) => {
+        if (!isLoggedIn()) {
+          e.preventDefault();
+          alert('You must log in first!');
+          window.location.href = 'login';
+        } else {
+          e.preventDefault();
+          window.location.href = 'dashboard';
+        }
+      });
+    });
+  }
+  document.addEventListener('DOMContentLoaded', attachLoginRedirect);
+</script>
+
+</body>
+</html>
